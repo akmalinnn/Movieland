@@ -6,12 +6,12 @@ import com.movieland.data.model.Movie
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 
-interface MoviePopularRepository {
-    fun getPopularPlaying(): Flow<ResultWrapper<List<com.movieland.data.model.Movie>>>
+interface MovieTopRatedRepository {
+    fun getTopRatedPlaying(): Flow<ResultWrapper<List<Movie>>>
 }
 
-//class MoviePopularRepositoryImpl(private val dataSource: MoviePopularDataSource) : MoviePopularRepository {
-//    override fun getPopularPlaying(): Flow<ResultWrapper<List<Movie>>> {
+//class MovieTopRatedRepositoryImpl(private val dataSource: MovieTopRatedDataSource) : MovieTopRatedRepository {
+//    override fun getTopRatedPlaying(): Flow<ResultWrapper<List<Movie>>> {
 //        return proceedFlow {
 //            dataSource.getMovieList().data.toMovieList()
 //        }

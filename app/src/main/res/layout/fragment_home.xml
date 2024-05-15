@@ -186,7 +186,7 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <include
-            android:id="@+id/layout_content_state_popular"
+            android:id="@+id/layout_content_state_top"
             layout="@layout/layout_content_state"
             android:layout_width="match_parent"
             android:layout_height="match_parent"

@@ -11,4 +11,6 @@
     <string name="text_info">Info</string>
     <string name="text_share">Share</string>
     <string name="text_view_all">Popular</string>
+    <string name="title_tab_home">Home</string>
+    <string name="title_tab_movie_list">My List</string>
 </resources>
