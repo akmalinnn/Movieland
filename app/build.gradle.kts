@@ -46,14 +46,24 @@ android {
             buildConfigField(
                 type = "String",
                 name = "BASE_URL",
-                value = "\"https://5e892715-c531-45ac-9582-f12401c4bcf4.mock.pstmn.io/\"",
+                value = "\"https://api.themoviedb.org/\"",
+            )
+            buildConfigField(
+                type = "String",
+                name = "API_KEY",
+                value = "\"eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJlMzJiZWY2N2I1ZDEwZGQ2MTI1ZWMzMTAxODhiYTVjYiIsInN1YiI6IjY2NDIxZTM2YTIyZjExYjAzZjJjYjYwYyIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.YM4O2LqKntoutt9pEB8XqbF44p5wp5XYHYflWrPBHnU\"",
             )
         }
         create("integration") {
             buildConfigField(
                 type = "String",
                 name = "BASE_URL",
-                value = "\"https://5e892715-c531-45ac-9582-f12401c4bcf4.mock.pstmn.io/\"",
+                value = "\"https://api.themoviedb.org/\"",
+            )
+            buildConfigField(
+                type = "String",
+                name = "API_KEY",
+                value = "\"eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJlMzJiZWY2N2I1ZDEwZGQ2MTI1ZWMzMTAxODhiYTVjYiIsInN1YiI6IjY2NDIxZTM2YTIyZjExYjAzZjJjYjYwYyIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.YM4O2LqKntoutt9pEB8XqbF44p5wp5XYHYflWrPBHnU\"",
             )
         }
     }
