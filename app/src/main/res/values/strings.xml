@@ -1,3 +1,14 @@
 <resources>
     <string name="app_name">Movieland</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="text_header_my_list">My List</string>
+    <string name="text_now_playing">Now Playing</string>
+    <string name="text_popular">Popular</string>
+    <string name="text_upcoming_movies">Upcoming Movies</string>
+    <string name="text_top_rated">Top Rated</string>
+    <string name="text_empty">Empty</string>
+    <string name="text_info">Info</string>
+    <string name="text_share">Share</string>
+    <string name="text_view_all">Popular</string>
 </resources>
