@@ -10,7 +10,10 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import coil.load
 import com.catnip.kokomputer.utils.proceedWhen
+import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.movieland.R
 import com.movieland.data.model.Movie
+import com.movieland.databinding.FragmentDetailBinding
 import com.movieland.databinding.FragmentHomeBinding
 import com.movieland.presentation.home.adapter.MovieAdapter
 import com.movieland.presentation.home.adapter.OnItemClickedListener
@@ -18,6 +21,7 @@ import com.movieland.presentation.viewAll.ViewAllActivity
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import com.movieland.presentation.detail.DetailFragment
 
 class HomeFragment : Fragment() {
     private lateinit var binding: FragmentHomeBinding
@@ -45,6 +49,7 @@ class HomeFragment : Fragment() {
         observeData()
         setClickAction()
         setClickListenerViewAllAction()
+
     }
 
     private fun setClickListenerViewAllAction() {
@@ -65,6 +70,7 @@ class HomeFragment : Fragment() {
         binding.ivMoreNowPlaying.setOnClickListener {
             intent.putExtra("HEADER", "Now Playing")
             startActivity(intent)
+
         }
     }
 
@@ -75,13 +81,8 @@ class HomeFragment : Fragment() {
         observeTopRatedData()
     }
 
+
     private fun setClickAction() {
-        binding.layoutBanner.btnInfo.setOnClickListener {
-
-        }
-        binding.layoutBanner.btnShare.setOnClickListener {
-
-        }
         binding.ivMoreNowPlaying.setOnClickListener {
 
         }
@@ -94,11 +95,18 @@ class HomeFragment : Fragment() {
         binding.ivMoreTopRated
     }
 
+
     private fun onItemClick(movie: Movie) {
-//        val intent = Intent(requireContext(), DetailActivity::class.java)
-//        intent.putExtra("EXTRAS", movie)
-//        startActivity(intent)
+        val detailFragment = DetailFragment().apply {
+            arguments = Bundle().apply {
+                putParcelable(DetailFragment.EXTRAS_MOVIE, movie)
+            }
+        }
+
+        detailFragment.show(parentFragmentManager, DetailFragment::class.java.simpleName)
     }
+
+
 
     private fun bindBannerMovieData(movie: List<Movie>) {
         val randomMovieIndex = movie.indices.random()
@@ -108,6 +116,30 @@ class HomeFragment : Fragment() {
         binding.layoutBanner.tvMovieDescription.text = randomMovie.desc
         binding.layoutBanner.ivBanner.load("https://image.tmdb.org/t/p/w500/${randomMovie.image}") {
             crossfade(1000)
+        }
+
+        binding.layoutBanner.btnShare.setOnClickListener {
+
+            val message = getString(R.string.https_www_themoviedb_org_movie, randomMovie.id)
+            val shareIntent = Intent().apply {
+                action = Intent.ACTION_SEND
+                putExtra(Intent.EXTRA_TEXT, message)
+                type = getString(R.string.text_html)
+            }
+            startActivity(Intent.createChooser(shareIntent, getString(R.string.share_via)))
+
+        }
+
+        binding.layoutBanner.btnInfo.setOnClickListener {
+
+            val detailFragment = DetailFragment().apply {
+                arguments = Bundle().apply {
+                    putParcelable(DetailFragment.EXTRAS_MOVIE, randomMovie)
+                }
+            }
+
+            detailFragment.show(parentFragmentManager, DetailFragment::class.java.simpleName)
+
         }
     }
 

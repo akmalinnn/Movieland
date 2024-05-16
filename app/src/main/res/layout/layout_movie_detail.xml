@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="8dp"
+    android:background="@color/black"
+    android:paddingBottom="16dp">
+
+
+    <View
+        android:id="@+id/view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:elevation="4dp"
+        app:layout_constraintBottom_toBottomOf="@+id/tv_movie_date" />
+
+    <ImageView
+        android:id="@+id/iv_movie_image_bg"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:scaleType="centerCrop"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:src="@tools:sample/avatars" />
+
+    <ImageView
+        android:id="@+id/iv_movie_image"
+        android:layout_width="140dp"
+        android:layout_height="200dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="100dp"
+        android:scaleType="centerCrop"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:src="@tools:sample/avatars" />
+
+    <TextView
+        android:id="@+id/tv_movie_title"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:textColor="@color/white"
+        android:textSize="18sp"
+        android:textStyle="bold"
+
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/iv_movie_image"
+        app:layout_constraintTop_toBottomOf="@+id/iv_movie_image_bg"
+        tools:text="Avengerswwwwwwwwwwwwwwwwwwwwwwwwwwww" />
+
+    <TextView
+        android:id="@+id/tv_movie_rating"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:textAlignment="viewEnd"
+        android:textColor="@color/white"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/tv_movie_date"
+        tools:text="4.0" />
+
+    <TextView
+        android:id="@+id/tv_movie_date"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:ellipsize="end"
+        android:gravity="start"
+        android:textAlignment="viewStart"
+        android:textColor="@color/white"
+        android:textSize="12sp"
+
+        app:layout_constraintEnd_toStartOf="@+id/tv_movie_rating"
+        app:layout_constraintStart_toEndOf="@+id/iv_movie_image"
+        app:layout_constraintTop_toBottomOf="@+id/tv_movie_title"
+        tools:text="25-03-2024" />
+
+    <com.facebook.shimmer.ShimmerFrameLayout
+        android:id="@+id/shimmer_layout"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:visibility="gone">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:scaleType="centerCrop"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:background="@color/shimmerColor"
+            tools:src="@tools:sample/avatars" />
+
+        <ImageView
+            android:layout_width="140dp"
+            android:layout_height="200dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="100dp"
+            android:scaleType="centerCrop"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:background="@color/shimmerColor"
+            tools:src="@tools:sample/avatars" />
+
+
+    </com.facebook.shimmer.ShimmerFrameLayout>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

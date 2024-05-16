@@ -96,7 +96,7 @@ dependencies {
     implementation(libs.retrofit.gson)
     implementation(libs.okhttp)
     implementation(libs.koin.android)
-
+    implementation ("com.facebook.shimmer:shimmer:0.5.0")
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

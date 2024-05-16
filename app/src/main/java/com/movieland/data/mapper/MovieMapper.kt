@@ -1,6 +1,7 @@
 package com.movieland.data.mapper
 
 import com.movieland.data.model.Movie
+import com.movieland.data.source.network.model.detail.DetailMovieResponse
 import com.movieland.data.source.network.model.movieNowPlaying.ResultNowPlayingResponse
 import com.movieland.data.source.network.model.moviePopular.ResultPopularMovieResponse
 import com.movieland.data.source.network.model.movieTopRating.ResultTopRatedResponse
@@ -13,7 +14,8 @@ fun ResultNowPlayingResponse?.toMovieNowPlaying() =
         date = this?.releaseDate.orEmpty(),
         rating = this?.voteAverage ?: 0.0,
         desc = this?.overview.orEmpty(),
-        image = this?.posterPath.orEmpty()
+        image = this?.posterPath.orEmpty(),
+        banner = this?.backdropPath.orEmpty()
     )
 
 fun ResultPopularMovieResponse?.toPopularMovie() =
@@ -23,7 +25,8 @@ fun ResultPopularMovieResponse?.toPopularMovie() =
         date = this?.releaseDate.orEmpty(),
         rating = this?.voteAverage ?: 0.0,
         desc = this?.overview.orEmpty(),
-        image = this?.posterPath.orEmpty()
+        image = this?.posterPath.orEmpty(),
+        banner = this?.backdropPath.orEmpty()
     )
 
 fun ResultTopRatedResponse?.toTopRatedMovie() =
@@ -33,7 +36,8 @@ fun ResultTopRatedResponse?.toTopRatedMovie() =
         date = this?.releaseDate.orEmpty(),
         rating = this?.voteAverage ?: 0.0,
         desc = this?.overview.orEmpty(),
-        image = this?.posterPath.orEmpty()
+        image = this?.posterPath.orEmpty(),
+        banner = this?.backdropPath.orEmpty()
     )
 
 fun ResultUpcomingMovieResponse?.toUpcomingMovie() =
@@ -43,8 +47,10 @@ fun ResultUpcomingMovieResponse?.toUpcomingMovie() =
         date = this?.releaseDate.orEmpty(),
         rating = this?.voteAverage ?: 0.0,
         desc = this?.overview.orEmpty(),
-        image = this?.posterPath.orEmpty()
+        image = this?.posterPath.orEmpty(),
+        banner = this?.backdropPath.orEmpty()
     )
+
 
 fun Collection<ResultNowPlayingResponse>?.toMovieNowPlayed(): List<Movie> =
     this?.map { it.toMovieNowPlaying() } ?: listOf()
@@ -57,3 +63,4 @@ fun Collection<ResultTopRatedResponse>?.toMovieTopRated(): List<Movie> =
 
 fun Collection<ResultUpcomingMovieResponse>?.toMovieUpcoming(): List<Movie> =
     this?.map { it.toUpcomingMovie() } ?: listOf()
+

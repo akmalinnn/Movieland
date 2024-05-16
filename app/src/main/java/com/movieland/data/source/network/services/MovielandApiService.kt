@@ -40,10 +40,10 @@ interface MovielandApiService {
         @Query("page") page: Int
     ): UpcomingMovieResponse
 
-
+    @Headers("accept: application/json", "Authorization: Bearer ${BuildConfig.API_KEY}")
     @GET("3/movie/{id}?language=en-US")
     suspend fun getMovieDetail(
-        @Path("id") id: String,
+        @Path("id") movieId: Int,
     ): DetailMovieResponse
 
     companion object {

@@ -1,16 +1,21 @@
 package com.movieland.di
 
+import com.movieland.data.datasource.detail.DetailDataSource
+import com.movieland.data.datasource.detail.DetailDataSourceImpl
 import com.movieland.data.datasource.movie.MovieApiDataSource
 import com.movieland.data.datasource.movie.MovieDataSource
 import com.movieland.data.paging.NowPlayingPagingSource
 import com.movieland.data.paging.PopularPagingSource
 import com.movieland.data.paging.TopRatedPagingSource
 import com.movieland.data.paging.UpComingPagingSource
+import com.movieland.data.repository.detail.DetailMovieRepository
+import com.movieland.data.repository.detail.DetailMovieRepositoryImpl
 import com.movieland.data.repository.movie.MovieRepository
 import com.movieland.data.repository.movie.MovieRepositoryImpl
 import com.movieland.data.repository.view.ViewAllPagingRepository
 import com.movieland.data.repository.view.ViewAllPagingRepositoryImpl
 import com.movieland.data.source.network.services.MovielandApiService
+import com.movieland.presentation.detail.DetailViewModel
 import com.movieland.presentation.home.HomeViewModel
 import com.movieland.presentation.main.MainViewModel
 import com.movieland.presentation.viewAll.ViewAllViewModel
@@ -33,6 +38,7 @@ object AppModules {
     private val datasource =
         module {
             single<MovieDataSource> { MovieApiDataSource(get()) }
+            single<DetailDataSource> { DetailDataSourceImpl(get()) }
         }
 
     private val paging =
@@ -47,12 +53,14 @@ object AppModules {
         module {
             single<MovieRepository> { MovieRepositoryImpl(get()) }
             single<ViewAllPagingRepository> { ViewAllPagingRepositoryImpl(get()) }
+            single<DetailMovieRepository> { DetailMovieRepositoryImpl(get()) }
         }
 
     private val viewModel =
         module {
             viewModelOf(::HomeViewModel)
             viewModelOf(::MainViewModel)
+            viewModelOf(::DetailViewModel)
             viewModel { params ->
                 ViewAllViewModel(
                     extras = params.get(),
