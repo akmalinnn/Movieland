@@ -1,5 +1,6 @@
 package com.movieland.presentation.home
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -13,6 +14,7 @@ import com.movieland.data.model.Movie
 import com.movieland.databinding.FragmentHomeBinding
 import com.movieland.presentation.home.adapter.MovieAdapter
 import com.movieland.presentation.home.adapter.OnItemClickedListener
+import com.movieland.presentation.viewAll.ViewAllActivity
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -42,6 +44,28 @@ class HomeFragment : Fragment() {
         setupAdapters()
         observeData()
         setClickAction()
+        setClickListenerViewAllAction()
+    }
+
+    private fun setClickListenerViewAllAction() {
+        val intent = Intent(requireContext(), ViewAllActivity::class.java)
+
+        binding.ivMoreTopRated.setOnClickListener {
+            intent.putExtra("HEADER", "Top Rated")
+            startActivity(intent)
+        }
+        binding.ivMorePopular.setOnClickListener {
+            intent.putExtra("HEADER", "Popular")
+            startActivity(intent)
+        }
+        binding.ivMoreUpcomingMovies.setOnClickListener {
+            intent.putExtra("HEADER", "Upcoming")
+            startActivity(intent)
+        }
+        binding.ivMoreNowPlaying.setOnClickListener {
+            intent.putExtra("HEADER", "Now Playing")
+            startActivity(intent)
+        }
     }
 
     private fun observeData() {

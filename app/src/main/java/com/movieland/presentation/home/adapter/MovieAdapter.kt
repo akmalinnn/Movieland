@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import com.movieland.data.model.Movie
-import com.movieland.databinding.ItemMovieBinding
+import com.movieland.databinding.LayoutMovieBinding
 
 class MovieAdapter(
     private val listener: OnItemClickedListener<Movie>,
@@ -44,7 +44,7 @@ class MovieAdapter(
         viewType: Int,
     ): MovieViewHolder {
         return MovieViewHolder(
-            ItemMovieBinding.inflate(
+            LayoutMovieBinding.inflate(
                 LayoutInflater.from(parent.context),
                 parent,
                 false,
@@ -63,7 +63,7 @@ class MovieAdapter(
     }
 
     class MovieViewHolder(
-        private val binding: ItemMovieBinding,
+        private val binding: LayoutMovieBinding,
         private val listener: OnItemClickedListener<Movie>,
     ) :
         RecyclerView.ViewHolder(binding.root) {
