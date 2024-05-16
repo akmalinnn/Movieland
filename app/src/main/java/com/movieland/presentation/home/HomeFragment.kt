@@ -4,55 +4,33 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import coil.load
 import com.catnip.kokomputer.utils.proceedWhen
-import com.movieland.R
 import com.movieland.data.model.Movie
 import com.movieland.databinding.FragmentHomeBinding
 import com.movieland.presentation.home.adapter.MovieAdapter
+import com.movieland.presentation.home.adapter.OnItemClickedListener
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class HomeFragment : Fragment() {
     private lateinit var binding: FragmentHomeBinding
     private val homeViewModel: HomeViewModel by viewModel()
-
-    private val nowPlayingAdapter: MovieAdapter by lazy {
-        MovieAdapter { movie ->
-            Toast.makeText(context, "Clicked on ${movie.desc}", Toast.LENGTH_SHORT).show()
-        }
-    }
-
-    private val popularAdapter: MovieAdapter by lazy {
-        MovieAdapter { movie ->
-            Toast.makeText(context, "Clicked on ${movie.desc}", Toast.LENGTH_SHORT).show()
-        }
-    }
-
-    private val topRatedAdapter: MovieAdapter by lazy {
-        MovieAdapter { movie ->
-            Toast.makeText(context, "Clicked on ${movie.desc}", Toast.LENGTH_SHORT).show()
-        }
-    }
-
-    private val upComingAdapter: MovieAdapter by lazy {
-        MovieAdapter { movie ->
-            Toast.makeText(context, "Clicked on ${movie.desc}", Toast.LENGTH_SHORT).show()
-        }
-    }
-
-    private var nowPlayingMovies: List<Movie> = emptyList()
-    private var popularMovies: List<Movie> = emptyList()
-    private var topRatedMovies: List<Movie> = emptyList()
+    private lateinit var nowPlayingAdapter: MovieAdapter
+    private lateinit var popularAdapter: MovieAdapter
+    private lateinit var upcomingAdapter: MovieAdapter
+    private lateinit var topRatedAdapter: MovieAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View {
-        binding = FragmentHomeBinding.inflate(layoutInflater, container, false)
+        binding = FragmentHomeBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -61,207 +39,163 @@ class HomeFragment : Fragment() {
         savedInstanceState: Bundle?,
     ) {
         super.onViewCreated(view, savedInstanceState)
-        setupBanner()
-        setupMovieNowPlayingList()
-        setupMoviePopularList()
-        setupMovieTopRatedList()
-        setupMovieUpComingList()
-        proceedMovieNowPlaying()
-        proceedMoviePopular()
-        proceedMovieTopRated()
-        proceedMovieUpComing()
-        combineAndSetBannerMovies()
+        setupAdapters()
+        observeData()
+        setClickAction()
     }
 
-    private fun setupBanner() {
-        binding.layoutBanner.ivBg.isVisible = false
-        binding.layoutBanner.tvDesc.isVisible = false
-        binding.layoutBanner.tvTitle.isVisible = false
+    private fun observeData() {
+        observeMovieNowPlayingData()
+        observeMoviePopularData()
+        observeMovieUpcomingData()
+        observeTopRatedData()
     }
 
-    override fun onResume() {
-        super.onResume()
-        combineAndSetBannerMovies()
+    private fun setClickAction() {
+        binding.layoutBanner.btnInfo.setOnClickListener {
+
+        }
+        binding.layoutBanner.btnShare.setOnClickListener {
+
+        }
+        binding.ivMoreNowPlaying.setOnClickListener {
+
+        }
+        binding.ivMorePopular.setOnClickListener {
+
+        }
+        binding.ivMoreUpcomingMovies.setOnClickListener {
+
+        }
+        binding.ivMoreTopRated
     }
 
-    private fun setupMovieBanner(movies: List<Movie>) {
-        if (movies.isNotEmpty()) {
-            binding.layoutBanner.ivBg.isVisible = true
-            binding.layoutBanner.tvDesc.isVisible = true
-            binding.layoutBanner.tvTitle.isVisible = true
-            val randomMovie = movies.random()
-            bindBannerMovie(randomMovie)
+    private fun onItemClick(movie: Movie) {
+//        val intent = Intent(requireContext(), DetailActivity::class.java)
+//        intent.putExtra("EXTRAS", movie)
+//        startActivity(intent)
+    }
+
+    private fun bindBannerMovieData(movie: List<Movie>) {
+        val randomMovieIndex = movie.indices.random()
+        val randomMovie = movie[randomMovieIndex]
+
+        binding.layoutBanner.tvMovieTittle.text = randomMovie.title
+        binding.layoutBanner.tvMovieDescription.text = randomMovie.desc
+        binding.layoutBanner.ivBanner.load("https://image.tmdb.org/t/p/w500/${randomMovie.image}") {
+            crossfade(1000)
         }
     }
 
-    private fun bindBannerMovie(movie: Movie) {
-        binding.layoutBanner.ivBg.load("https://image.tmdb.org/t/p/w500${movie.posterPath}")
-        binding.layoutBanner.tvTitle.text = movie.title
-        binding.layoutBanner.tvDesc.text = movie.desc
-    }
-
-    private fun setupMovieNowPlayingList() {
-        binding.rvNowPlaying.apply {
-            adapter = nowPlayingAdapter
+    private fun startRandomMovieBannerUpdater(movies: List<Movie>) {
+        lifecycleScope.launch {
+            while (true) {
+                bindBannerMovieData(movies)
+                delay(10000)
+            }
         }
     }
 
-    private fun setupMoviePopularList() {
-        binding.rvPopular.apply {
-            adapter = popularAdapter
+    private fun setupAdapters() {
+        val itemClickListener = object : OnItemClickedListener<Movie> {
+            override fun onItemClicked(item: Movie) {
+                onItemClick(item)
+            }
         }
+
+        nowPlayingAdapter = MovieAdapter(itemClickListener)
+        popularAdapter = MovieAdapter(itemClickListener)
+        upcomingAdapter = MovieAdapter(itemClickListener)
+        topRatedAdapter = MovieAdapter(itemClickListener)
+
+        binding.rvMovieNowPlaying.adapter = nowPlayingAdapter
+        binding.rvMoviePopular.adapter = popularAdapter
+        binding.rvMovieUpcomingMovies.adapter = upcomingAdapter
+        binding.rvMovieTopRated.adapter = topRatedAdapter
     }
 
-    private fun setupMovieTopRatedList() {
-        binding.rvTopRated.apply {
-            adapter = topRatedAdapter
-        }
-    }
-
-    private fun setupMovieUpComingList() {
-        binding.rvUpcomingMovies.apply {
-            adapter = upComingAdapter
-        }
-    }
-
-    private fun proceedMovieNowPlaying() {
-        homeViewModel.getMoviesNowPlaying().observe(viewLifecycleOwner) {
-            it?.proceedWhen(
-                doOnLoading = {
-                    binding.rvNowPlaying.isVisible = false
-                    binding.layoutContentStateNowPlaying.tvError.isVisible = false
-                },
+    private fun observeMovieNowPlayingData() {
+        homeViewModel.getMovieNowPlaying().observe(viewLifecycleOwner) {
+            it.proceedWhen(
                 doOnSuccess = {
-                    binding.rvNowPlaying.isVisible = true
+                    binding.pbLoadingNowPlaying.isVisible = false
+                    binding.rvMovieNowPlaying.isVisible = true
                     it.payload?.let { data ->
-                        bindMovieNowPlayingList(data)
-                        combineAndSetBannerMovies()
+                        startRandomMovieBannerUpdater(data)
+                        nowPlayingAdapter.submitData(data)
                     }
-                    binding.layoutContentStateNowPlaying.tvError.isVisible = false
+                },
+                doOnLoading = {
+                    binding.pbLoadingNowPlaying.isVisible = true
+                    binding.rvMovieNowPlaying.isVisible = false
                 },
                 doOnError = {
-                    binding.rvNowPlaying.isVisible = false
-                    binding.layoutContentStateNowPlaying.tvError.isVisible = true
-                    binding.layoutContentStateNowPlaying.tvError.text = it.exception?.message.orEmpty()
-                },
-                doOnEmpty = {
-                    binding.rvNowPlaying.isVisible = false
-                    binding.layoutContentStateNowPlaying.tvError.isVisible = false
-                    binding.layoutContentStateNowPlaying.tvError.text = getString(R.string.text_empty)
+                    binding.pbLoadingNowPlaying.isVisible = false
                 },
             )
         }
     }
 
-    private fun proceedMoviePopular() {
-        homeViewModel.getMoviesPopular().observe(viewLifecycleOwner) {
-            it?.proceedWhen(
-                doOnLoading = {
-                    binding.rvPopular.isVisible = false
-                    binding.layoutContentStatePopular.tvError.isVisible = false
-                },
+    private fun observeMoviePopularData() {
+        homeViewModel.getMoviePopular().observe(viewLifecycleOwner) {
+            it.proceedWhen(
                 doOnSuccess = {
-                    binding.rvPopular.isVisible = true
+                    binding.pbLoadingPopular.isVisible = false
+                    binding.rvMoviePopular.isVisible = true
                     it.payload?.let { data ->
-                        bindMoviePopularList(data)
-                        combineAndSetBannerMovies()
+                        popularAdapter.submitData(data)
                     }
-                    binding.layoutContentStatePopular.tvError.isVisible = false
+                },
+                doOnLoading = {
+                    binding.pbLoadingPopular.isVisible = true
+                    binding.rvMoviePopular.isVisible = false
                 },
                 doOnError = {
-                    binding.rvNowPlaying.isVisible = false
-                    binding.layoutContentStatePopular.tvError.isVisible = true
-                    binding.layoutContentStatePopular.tvError.text = it.exception?.message.orEmpty()
-                },
-                doOnEmpty = {
-                    binding.rvNowPlaying.isVisible = false
-                    binding.layoutContentStatePopular.tvError.isVisible = false
-                    binding.layoutContentStatePopular.tvError.text = getString(R.string.text_empty)
+                    binding.pbLoadingPopular.isVisible = false
                 },
             )
         }
     }
 
-    private fun proceedMovieTopRated() {
-        homeViewModel.getMoviesTopRated().observe(viewLifecycleOwner) {
-            it?.proceedWhen(
-                doOnLoading = {
-                    binding.rvTopRated.isVisible = false
-                    binding.layoutContentStateTop.tvError.isVisible = false
-                },
+    private fun observeMovieUpcomingData() {
+        homeViewModel.getMovieUpcoming().observe(viewLifecycleOwner) {
+            it.proceedWhen(
                 doOnSuccess = {
-                    binding.rvTopRated.isVisible = true
+                    binding.pbLoadingUpcomingMovies.isVisible = false
+                    binding.rvMovieUpcomingMovies.isVisible = true
                     it.payload?.let { data ->
-                        bindMovieTopRatedList(data)
-                        combineAndSetBannerMovies()
+                        upcomingAdapter.submitData(data)
                     }
-                    binding.layoutContentStateTop.tvError.isVisible = false
+                },
+                doOnLoading = {
+                    binding.pbLoadingUpcomingMovies.isVisible = true
+                    binding.rvMovieUpcomingMovies.isVisible = false
                 },
                 doOnError = {
-                    binding.rvNowPlaying.isVisible = false
-                    binding.layoutContentStateTop.tvError.isVisible = true
-                    binding.layoutContentStateTop.tvError.text = it.exception?.message.orEmpty()
-                },
-                doOnEmpty = {
-                    binding.rvNowPlaying.isVisible = false
-                    binding.layoutContentStateTop.tvError.isVisible = false
-                    binding.layoutContentStateTop.tvError.text = getString(R.string.text_empty)
+                    binding.pbLoadingUpcomingMovies.isVisible = false
                 },
             )
         }
     }
 
-    private fun proceedMovieUpComing() {
-        homeViewModel.getMoviesUpComing().observe(viewLifecycleOwner) {
-            it?.proceedWhen(
-                doOnLoading = {
-                    binding.rvUpcomingMovies.isVisible = false
-                    binding.layoutContentStateUpcoming.tvError.isVisible = false
-                },
+    private fun observeTopRatedData() {
+        homeViewModel.getMovieTopRating().observe(viewLifecycleOwner) {
+            it.proceedWhen(
                 doOnSuccess = {
-                    binding.rvUpcomingMovies.isVisible = true
+                    binding.pbLoadingTopRated.isVisible = false
+                    binding.rvMovieTopRated.isVisible = true
                     it.payload?.let { data ->
-                        bindMovieUpComingList(data)
+                        topRatedAdapter.submitData(data)
                     }
-                    binding.layoutContentStateUpcoming.tvError.isVisible = false
+                },
+                doOnLoading = {
+                    binding.pbLoadingTopRated.isVisible = true
+                    binding.rvMovieTopRated.isVisible = false
                 },
                 doOnError = {
-                    binding.rvNowPlaying.isVisible = false
-                    binding.layoutContentStateUpcoming.tvError.isVisible = true
-                    binding.layoutContentStateUpcoming.tvError.text = it.exception?.message.orEmpty()
-                },
-                doOnEmpty = {
-                    binding.rvNowPlaying.isVisible = false
-                    binding.layoutContentStateUpcoming.tvError.isVisible = false
-                    binding.layoutContentStateUpcoming.tvError.text = getString(R.string.text_empty)
+                    binding.pbLoadingTopRated.isVisible = false
                 },
             )
-        }
-    }
-
-    private fun bindMovieNowPlayingList(data: List<Movie>) {
-        nowPlayingMovies = data
-        nowPlayingAdapter.submitData(data)
-    }
-
-    private fun bindMoviePopularList(data: List<Movie>) {
-        popularMovies = data
-        popularAdapter.submitData(data)
-    }
-
-    private fun bindMovieTopRatedList(data: List<Movie>) {
-        topRatedMovies = data
-        topRatedAdapter.submitData(data)
-    }
-
-    private fun bindMovieUpComingList(data: List<Movie>) {
-        upComingAdapter.submitData(data)
-    }
-
-    private fun combineAndSetBannerMovies() {
-        val combinedMovies = nowPlayingMovies + popularMovies + topRatedMovies
-        if (combinedMovies.isNotEmpty()) {
-            setupMovieBanner(combinedMovies)
         }
     }
 }

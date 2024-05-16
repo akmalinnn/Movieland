@@ -1,21 +1,59 @@
 package com.movieland.data.mapper
 
 import com.movieland.data.model.Movie
-import com.movieland.data.source.network.model.MovieListResponse
+import com.movieland.data.source.network.model.movieNowPlaying.ResultNowPlayingResponse
+import com.movieland.data.source.network.model.moviePopular.ResultPopularMovieResponse
+import com.movieland.data.source.network.model.movieTopRating.ResultTopRatedResponse
+import com.movieland.data.source.network.model.movieUpcoming.ResultUpcomingMovieResponse
 
-fun MovieListResponse?.toMovie() =
+fun ResultNowPlayingResponse?.toMovieNowPlaying() =
     Movie(
-        backdropPath = this?.backdropPath.orEmpty(),
-        id = this?.id,
+        id = this?.id ?: 0,
         title = this?.title.orEmpty(),
-        desc = this?.desc.orEmpty(),
-        popularity = this?.popularity ?: 0.0,
-        posterPath = this?.posterPath.orEmpty(),
-        releaseDate = this?.releaseDate.orEmpty(),
-        voteAverage = this?.voteAverage ?: 0.0,
+        date = this?.releaseDate.orEmpty(),
+        rating = this?.voteAverage ?: 0.0,
+        desc = this?.overview.orEmpty(),
+        image = this?.posterPath.orEmpty()
     )
 
-fun Collection<MovieListResponse>?.toMovieList() =
-    this?.map {
-        it.toMovie()
-    } ?: listOf()
+fun ResultPopularMovieResponse?.toPopularMovie() =
+    Movie(
+        id = this?.id ?: 0,
+        title = this?.title.orEmpty(),
+        date = this?.releaseDate.orEmpty(),
+        rating = this?.voteAverage ?: 0.0,
+        desc = this?.overview.orEmpty(),
+        image = this?.posterPath.orEmpty()
+    )
+
+fun ResultTopRatedResponse?.toTopRatedMovie() =
+    Movie(
+        id = this?.id ?: 0,
+        title = this?.title.orEmpty(),
+        date = this?.releaseDate.orEmpty(),
+        rating = this?.voteAverage ?: 0.0,
+        desc = this?.overview.orEmpty(),
+        image = this?.posterPath.orEmpty()
+    )
+
+fun ResultUpcomingMovieResponse?.toUpcomingMovie() =
+    Movie(
+        id = this?.id ?: 0,
+        title = this?.title.orEmpty(),
+        date = this?.releaseDate.orEmpty(),
+        rating = this?.voteAverage ?: 0.0,
+        desc = this?.overview.orEmpty(),
+        image = this?.posterPath.orEmpty()
+    )
+
+fun Collection<ResultNowPlayingResponse>?.toMovieNowPlayed(): List<Movie> =
+    this?.map { it.toMovieNowPlaying() } ?: listOf()
+
+fun Collection<ResultPopularMovieResponse>?.toMoviePopular(): List<Movie> =
+    this?.map { it.toPopularMovie() } ?: listOf()
+
+fun Collection<ResultTopRatedResponse>?.toMovieTopRated(): List<Movie> =
+    this?.map { it.toTopRatedMovie() } ?: listOf()
+
+fun Collection<ResultUpcomingMovieResponse>?.toMovieUpcoming(): List<Movie> =
+    this?.map { it.toUpcomingMovie() } ?: listOf()

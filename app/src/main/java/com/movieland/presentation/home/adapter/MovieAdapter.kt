@@ -7,12 +7,16 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import com.movieland.data.model.Movie
-import com.movieland.databinding.LayoutMovieBinding
+import com.movieland.databinding.ItemMovieBinding
 
-class MovieAdapter(private val itemClick: (Movie) -> Unit) :
-    RecyclerView.Adapter<MovieAdapter.ItemMovieViewHolder>() {
-    private val dataDiffer =
-        AsyncListDiffer(
+class MovieAdapter(
+    private val listener: OnItemClickedListener<Movie>,
+) :
+    RecyclerView.Adapter<MovieAdapter.MovieViewHolder>() {
+    private val data = mutableListOf<Movie>()
+
+    private val asyncDataDiffer =
+        AsyncListDiffer<Movie>(
             this,
             object : DiffUtil.ItemCallback<Movie>() {
                 override fun areItemsTheSame(
@@ -32,42 +36,49 @@ class MovieAdapter(private val itemClick: (Movie) -> Unit) :
         )
 
     fun submitData(data: List<Movie>) {
-        dataDiffer.submitList(data)
+        asyncDataDiffer.submitList(data)
     }
 
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int,
-    ): ItemMovieViewHolder {
-        val binding =
-            LayoutMovieBinding.inflate(
+    ): MovieViewHolder {
+        return MovieViewHolder(
+            ItemMovieBinding.inflate(
                 LayoutInflater.from(parent.context),
                 parent,
                 false,
-            )
-        return ItemMovieViewHolder(binding, itemClick)
+            ),
+            listener,
+        )
     }
+
+    override fun getItemCount(): Int = asyncDataDiffer.currentList.size
 
     override fun onBindViewHolder(
-        holder: ItemMovieViewHolder,
+        holder: MovieViewHolder,
         position: Int,
     ) {
-        holder.bindView(dataDiffer.currentList[position])
+        holder.bind(asyncDataDiffer.currentList[position])
     }
 
-    override fun getItemCount(): Int = dataDiffer.currentList.size
-
-    class ItemMovieViewHolder(
-        private val binding: LayoutMovieBinding,
-        val itemClick: (Movie) -> Unit,
-    ) : RecyclerView.ViewHolder(binding.root) {
-        fun bindView(item: Movie) {
-            with(item) {
-                binding.ivMovieImg.load("https://image.tmdb.org/t/p/w500${item.posterPath}") {
-                    crossfade(true)
-                }
-                itemView.setOnClickListener { itemClick(this) }
+    class MovieViewHolder(
+        private val binding: ItemMovieBinding,
+        private val listener: OnItemClickedListener<Movie>,
+    ) :
+        RecyclerView.ViewHolder(binding.root) {
+        fun bind(item: Movie) {
+            binding.ivMovieImage.load("https://image.tmdb.org/t/p/w500/${item.image}") {
+                crossfade(true)
+            }
+            itemView.setOnClickListener {
+                listener.onItemClicked(item)
             }
         }
     }
+
+}
+
+interface OnItemClickedListener<T> {
+    fun onItemClicked(item: T)
 }

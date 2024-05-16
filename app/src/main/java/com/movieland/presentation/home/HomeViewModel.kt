@@ -2,24 +2,14 @@ package com.movieland.presentation.home
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
-import com.movieland.data.repository.MovieNowPlayingRepository
-import com.movieland.data.repository.MoviePopularRepository
-import com.movieland.data.repository.MovieTopRatedRepository
-import com.movieland.data.repository.MovieUpComingRepository
+import com.movieland.data.repository.movie.MovieRepository
 import kotlinx.coroutines.Dispatchers
 
 class HomeViewModel(
-    private val movieNowPlayingRepository: MovieNowPlayingRepository,
-    private val moviePopularRepository: MoviePopularRepository,
-    private val movieTopRatedRepository: MovieTopRatedRepository,
-    private val movieUpComingRepository: MovieUpComingRepository,
+    private val movieRepository: MovieRepository
 ) : ViewModel() {
-    fun getMoviesNowPlaying() = movieNowPlayingRepository.getMoviesNowPlaying().asLiveData(
-        Dispatchers.IO)
-
-    fun getMoviesPopular() = moviePopularRepository.getPopularPlaying().asLiveData(Dispatchers.IO)
-
-    fun getMoviesTopRated() = movieTopRatedRepository.getTopRatedPlaying().asLiveData(Dispatchers.IO)
-
-    fun getMoviesUpComing() = movieUpComingRepository.getUpComingPlaying().asLiveData(Dispatchers.IO)
+    fun getMovieNowPlaying() = movieRepository.getNowPlaying(1).asLiveData(Dispatchers.IO)
+    fun getMoviePopular() = movieRepository.getPopular(1).asLiveData(Dispatchers.IO)
+    fun getMovieUpcoming() = movieRepository.getUpcoming(1).asLiveData(Dispatchers.IO)
+    fun getMovieTopRating() = movieRepository.getTopRating(1).asLiveData(Dispatchers.IO)
 }

@@ -1,10 +1,11 @@
 package com.movieland.data.source.network.services
 
 import com.movieland.BuildConfig
-import com.movieland.data.source.network.model.MovieNowPlayingResponse
-import com.movieland.data.source.network.model.MoviePopularResponse
-import com.movieland.data.source.network.model.MovieTopRatedResponse
-import com.movieland.data.source.network.model.MovieUpComingResponse
+import com.movieland.data.source.network.model.detail.DetailMovieResponse
+import com.movieland.data.source.network.model.movieNowPlaying.NowPlayingResponse
+import com.movieland.data.source.network.model.moviePopular.PopularMovieResponse
+import com.movieland.data.source.network.model.movieTopRating.TopRatedResponse
+import com.movieland.data.source.network.model.movieUpcoming.UpcomingMovieResponse
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -16,54 +17,34 @@ import java.util.concurrent.TimeUnit
 
 interface MovielandApiService {
     @Headers("accept: application/json", "Authorization: Bearer ${BuildConfig.API_KEY}")
-    @GET("3/movie/now_playing?language=en-US&page=1")
-    suspend fun getNowPlaying(
-        @Query("include_adult") includeAdult: Boolean = false,
-        @Query("include_video") includeVideo: Boolean = false,
-        @Query("language") language: String = "en-US",
-        @Query("page") page: Int = 1,
-        @Query("sort_by") sortBy: String = "popularity.desc",
-        @Query("with_release_type") withReleaseType: String = "2|3",
-        @Query("release_date.gte") minDate: String,
-        @Query("release_date.lte") maxDate: String,
-    ): MovieNowPlayingResponse
+    @GET("3/movie/now_playing")
+    suspend fun nowPlaying(
+        @Query("page") page: Int
+    ): NowPlayingResponse
 
-    @GET("3/movie/popular?language=en-US&page=1")
-    suspend fun getPopular(
-        @Query("include_adult") includeAdult: Boolean = false,
-        @Query("include_video") includeVideo: Boolean = false,
-        @Query("language") language: String = "en-US",
-        @Query("page") page: Int = 1,
-        @Query("sort_by") sortBy: String = "popularity.desc",
-    ): MoviePopularResponse
+    @Headers("accept: application/json", "Authorization: Bearer ${BuildConfig.API_KEY}")
+    @GET("3/movie/popular")
+    suspend fun popular(
+        @Query("page") page: Int
+    ): PopularMovieResponse
 
-    @GET("3/movie/top_rated?language=en-US&page=1")
-    suspend fun getTopRated(
-        @Query("include_adult") includeAdult: Boolean = false,
-        @Query("include_video") includeVideo: Boolean = false,
-        @Query("language") language: String = "en-US",
-        @Query("page") page: Int = 1,
-        @Query("sort_by") sortBy: String = "vote_average.desc",
-        @Query("without_genres") withoutGenres: String = "99,10755",
-        @Query("vote_count.gte") voteCountGte: Int = 200,
-    ): MovieTopRatedResponse
+    @Headers("accept: application/json", "Authorization: Bearer ${BuildConfig.API_KEY}")
+    @GET("3/movie/top_rated")
+    suspend fun topRated(
+        @Query("page") page: Int
+    ): TopRatedResponse
 
-    @GET("3/movie/upcoming?language=en-US&page=1")
-    suspend fun getUpcoming(
-        @Query("include_adult") includeAdult: Boolean = false,
-        @Query("include_video") includeVideo: Boolean = false,
-        @Query("language") language: String = "en-US",
-        @Query("page") page: Int = 1,
-        @Query("sort_by") sortBy: String = "popularity.desc",
-        @Query("with_release_type") withReleaseType: String = "2|3",
-        @Query("release_date.gte") minDate: String,
-        @Query("release_date.lte") maxDate: String,
-    ): MovieUpComingResponse
+    @Headers("accept: application/json", "Authorization: Bearer ${BuildConfig.API_KEY}")
+    @GET("3/movie/upcoming")
+    suspend fun upcoming(
+        @Query("page") page: Int
+    ): UpcomingMovieResponse
+
 
     @GET("3/movie/{id}?language=en-US")
     suspend fun getMovieDetail(
         @Path("id") id: String,
-    ): MovieResponse
+    ): DetailMovieResponse
 
     companion object {
         @JvmStatic

@@ -1,12 +1,15 @@
 package com.movieland.data.model
 
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
+
+
+@Parcelize
 data class Movie(
-    val backdropPath: String,
-    val id: Int?,
-    val title: String,
-    val desc: String,
-    val popularity: Double,
-    val posterPath: String,
-    val releaseDate: String,
-    val voteAverage: Double,
-)
+    var id: Int,
+    var title: String,
+    var date: String,
+    var rating: Double,
+    var desc: String,
+    var image: String
+) : Parcelable
