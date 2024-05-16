@@ -26,6 +26,9 @@ mockk = "1.13.10"
 coroutine-test = "1.7.2"
 turbine = "1.0.0"
 core-testing = "2.2.0"
+pagingCommonAndroid = "3.3.0"
+leanbackPaging = "1.1.0-alpha11"
+pagingRuntimeKtx = "3.3.0"
 
 
 [libraries]
@@ -75,6 +78,9 @@ mockk-agent = { group = "io.mockk", name = "mockk", version.ref = "mockk" }
 coroutine-test = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-test", version.ref = "coroutine-test" }
 turbine = { group = "app.cash.turbine", name = "turbine", version.ref = "turbine" }
 core-testing = { group = "androidx.arch.core", name = "core-testing", version.ref = "core-testing" }
+androidx-paging-common-android = { group = "androidx.paging", name = "paging-common-android", version.ref = "pagingCommonAndroid" }
+androidx-leanback-paging = { group = "androidx.leanback", name = "leanback-paging", version.ref = "leanbackPaging" }
+androidx-paging-runtime-ktx = { group = "androidx.paging", name = "paging-runtime-ktx", version.ref = "pagingRuntimeKtx" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }
