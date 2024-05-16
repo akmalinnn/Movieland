@@ -5,7 +5,7 @@ import kotlinx.parcelize.Parcelize
 
 
 @Parcelize
-data class Movie(
+data class MovieDetail (
     var id: Int,
     var title: String,
     var date: String,
@@ -13,4 +13,4 @@ data class Movie(
     var desc: String,
     var image: String,
     var banner: String
-) : Parcelable
+)  : Parcelable
