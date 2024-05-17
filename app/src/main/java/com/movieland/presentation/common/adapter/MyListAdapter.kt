@@ -1,4 +1,4 @@
-package com.movieland.presentation.myList.adapter
+package com.movieland.presentation.common.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -6,12 +6,12 @@ import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
+import com.catnip.kokomputer.core.ViewHolderBinder
 import com.movieland.data.model.MyList
 import com.movieland.databinding.ItemMyListBinding
-import com.movieland.presentation.home.adapter.OnItemClickedListener
 
 class MyListAdapter(
-    private val listener: OnItemClickedListener<MyList>,
+    private val mylistListener: MyListListener? = null,
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     private val dataDiffer =
         AsyncListDiffer(
@@ -41,14 +41,14 @@ class MyListAdapter(
         parent: ViewGroup,
         viewType: Int,
     ): RecyclerView.ViewHolder {
-        return if (listener != null) {
+        return if (mylistListener != null) {
             MyListViewHolder(
                 ItemMyListBinding.inflate(
                     LayoutInflater.from(parent.context),
                     parent,
                     false,
                 ),
-                listener,
+                mylistListener,
             )
         } else {
             MyListViewHolder(
@@ -57,7 +57,7 @@ class MyListAdapter(
                     parent,
                     false,
                 ),
-                listener,
+                mylistListener,
             )
         }
     }
@@ -74,29 +74,22 @@ class MyListAdapter(
 
 class MyListViewHolder(
     private val binding: ItemMyListBinding,
-    private val listener: OnItemClickedListener<MyList>,
+    private val myListListener: MyListListener?
 ) : RecyclerView.ViewHolder(binding.root), ViewHolderBinder<MyList> {
     override fun bind(item: MyList) {
-        setCartData(item)
-        setClickListeners(item)
+        setMyListData(item)
     }
 
-    private fun setCartData(item: MyList) {
-        with(binding) {
-            binding.ivMovieImage.load(item.movieImage) {
+    private fun setMyListData(item: MyList) {
+        with(binding){
+            binding.ivMovieImage.load(item.movieImage){
                 crossfade(true)
             }
         }
     }
 
-    private fun setClickListeners(item: MyList) {
-//        with(binding) {
-//            ivRemoveFavorite.setOnClickListener { favoriteListener?.onRemoveFavoriteClicked(item) }
-//        }
-    }
 }
 
-
-interface ViewHolderBinder<T> {
-    fun bind(item: T)
+interface MyListListener {
+    fun onRemoveMyListClicked(item: MyList)
 }
