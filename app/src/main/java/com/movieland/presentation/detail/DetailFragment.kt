@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.view.isVisible
 import coil.load
 import com.catnip.kokomputer.utils.proceedWhen
@@ -12,6 +13,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.movieland.R
 import com.movieland.data.model.Movie
 import com.movieland.data.model.MovieDetail
+import com.movieland.data.source.local.database.entity.MyListEntity
 import com.movieland.databinding.FragmentDetailBinding
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
@@ -20,6 +22,8 @@ class DetailFragment : BottomSheetDialogFragment() {
 
     private lateinit var binding: FragmentDetailBinding
     private var detail: MovieDetail? = null
+
+    private var movieData: MyListEntity? = null
     private val viewModel: DetailViewModel by viewModel {
         parametersOf(arguments)
     }
@@ -58,9 +62,11 @@ class DetailFragment : BottomSheetDialogFragment() {
                 if (!isAddedToList) {
                     favoriteButton.setImageResource(R.drawable.ic_done)
                     isAddedToList = true
+                    addMovieToFavorite()
                 } else {
                     favoriteButton.setImageResource(R.drawable.ic_add_mylist)
                     isAddedToList = false
+
                 }
             }
         }
@@ -68,6 +74,38 @@ class DetailFragment : BottomSheetDialogFragment() {
 
 
     }
+
+    private fun addMovieToFavorite() {
+        viewModel.addToFavorite(movieData).observe(this) {
+            it.proceedWhen(
+                doOnSuccess = {
+                    Toast.makeText(
+                        requireContext(),
+                        getString(R.string.text_succes_add_to_favorite),
+                        Toast.LENGTH_SHORT,
+                    ).show()
+                },
+            )
+        }
+    }
+
+//    private fun removeFavorite() {
+//        viewModel.removeFavorite(movieData).observe(this) {
+//            it.proceedWhen(
+//                doOnSuccess = {
+//                    Toast.makeText(
+//                        requireContext(),
+//                        getString(R.string.text_succes_add_to_favorite),
+//                        Toast.LENGTH_SHORT,
+//                    ).show()
+//                },
+//            )
+//        }
+//    }
+
+
+
+
 
 
     private fun observeData() {

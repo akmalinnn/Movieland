@@ -8,8 +8,6 @@ import androidx.room.PrimaryKey
 data class MyListEntity(
     @PrimaryKey(autoGenerate = true)
     var id: Int? = null,
-    @ColumnInfo(name = "movie_id")
-    var movieId: Int? = null,
     @ColumnInfo(name = "movie_title")
     var movieTitle: String,
     @ColumnInfo(name = "movie_image")
@@ -20,6 +18,5 @@ data class MyListEntity(
     var movieDate: String,
     @ColumnInfo(name = "movie_desc")
     var movieDesc: String,
-    @ColumnInfo(name = "movie_bool")
-    var movieBool: Boolean,
+
 )

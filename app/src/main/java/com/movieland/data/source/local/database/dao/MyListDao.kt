@@ -20,8 +20,15 @@ interface MyListDao {
     @Update()
     suspend fun updateMyList(mylist: MyListEntity): Int
 
-    @Delete()
-    suspend fun deleteMyList(mylist: MyListEntity): Int
+    @Query("SELECT * FROM MYLIST WHERE id = :movieId ")
+    fun checkFavoriteById(movieId: Int?): Flow<List<MyListEntity>>
+
+    @Query("DELETE FROM MYLIST WHERE id = :movieId")
+    suspend fun removeFavorite(movieId: Int?): Int
+
+    @Delete
+    suspend fun deleteFavorite(favorite: MyListEntity): Int
+
 
     @Query("DELETE FROM MYLIST")
     suspend fun deleteAll()

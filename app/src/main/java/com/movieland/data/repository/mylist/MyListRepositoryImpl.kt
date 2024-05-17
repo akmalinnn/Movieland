@@ -6,6 +6,7 @@ import com.catnip.kokomputer.utils.proceedFlow
 import com.movieland.data.datasource.mylist.MyListDataSource
 import com.movieland.data.mapper.toMyListEntity
 import com.movieland.data.mapper.toMyLists
+import com.movieland.data.model.Movie
 import com.movieland.data.model.MovieDetail
 import com.movieland.data.model.MyList
 import com.movieland.data.source.local.database.entity.MyListEntity
@@ -19,13 +20,14 @@ import java.lang.IllegalStateException
 class MyListRepositoryImpl(
     private val dataSource: MyListDataSource
 ) : MyListRepository {
-    override fun getAllMyList(): Flow<ResultWrapper<Pair<List<MyList>, Double>>> {
+
+    override fun getAllMyList(): Flow<ResultWrapper<Pair<List<Movie>, Double>>> {
         return dataSource.getAllMyList()
             .map {
                 // mapping into Favorite list and sum the total price
                 proceed {
                     val result = it.toMyLists()
-                    val totalPrice = result.sumOf { it.movieRating }
+                    val totalPrice = result.sumOf { it.rating }
                     Pair(result, totalPrice)
                 }
             }.map {
@@ -38,20 +40,19 @@ class MyListRepositoryImpl(
             }
     }
 
-    override fun createMyList(item: MovieDetail): Flow<ResultWrapper<Boolean>> {
+    override fun createMyList(item: Movie): Flow<ResultWrapper<Boolean>> {
         return item.id?.let { itemId ->
             // when id is not null
             proceedFlow {
                 val affectedRow =
                     dataSource.insertMyList(
                         MyListEntity(
-                            movieId = itemId,
+                            id = itemId,
                             movieTitle = item.title,
                             movieImage = item.image,
                             movieRating = item.rating,
                             movieDesc = item.desc,
                             movieDate = item.date,
-                            movieBool = true
                         ),
                     )
                 delay(2000)
@@ -62,8 +63,17 @@ class MyListRepositoryImpl(
         }
     }
 
-    override fun deleteMyList(item: MyList): Flow<ResultWrapper<Boolean>> {
+    override fun checkFavoriteById(movieId: Int?): Flow<List<MyListEntity>> {
+        return dataSource.checkFavoriteById(movieId)
+    }
+
+
+    override fun deleteMyList(item: Movie): Flow<ResultWrapper<Boolean>> {
         return proceedFlow { dataSource.deleteMyList(item.toMyListEntity()) > 0 }
+    }
+
+    override fun deleteMyListById(movieId: Int?): Flow<ResultWrapper<Boolean>> {
+        return proceedFlow { dataSource.deleteMyListbyId(movieId) > 0 }
     }
 
     override fun deleteAll(): Flow<ResultWrapper<Boolean>> {
