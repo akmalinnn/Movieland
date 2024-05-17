@@ -89,6 +89,7 @@ dependencies {
     implementation(libs.androidx.leanback.paging)
     implementation(libs.androidx.paging.runtime.ktx)
     testImplementation("junit:junit:4.12")
+    testImplementation("junit:junit:4.12")
     ksp(libs.room.compiler)
     implementation(libs.coroutine.core)
     implementation(libs.coroutine.android)
