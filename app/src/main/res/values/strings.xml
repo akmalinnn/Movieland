@@ -19,4 +19,5 @@
     <string name="text_html">text/html</string>
     <string name="https_www_themoviedb_org_movie">https://www.themoviedb.org/movie/%1$d</string>
     <string name="https_image_tmdb_org_t_p_w500">https://image.tmdb.org/t/p/w500%1$s</string>
+    <string name="my_list">My List</string>
 </resources>
