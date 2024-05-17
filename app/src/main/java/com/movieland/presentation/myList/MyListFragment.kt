@@ -1,31 +1,28 @@
 package com.movieland.presentation.myList
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
+import androidx.fragment.app.Fragment
 import com.catnip.kokomputer.utils.proceedWhen
-import com.movieland.R
-import com.movieland.data.model.Movie
-import com.movieland.data.model.MyList
 import com.movieland.databinding.FragmentMyListBinding
-import com.movieland.presentation.home.adapter.MovieAdapter
-import com.movieland.presentation.home.adapter.OnItemClickedListener
-import com.movieland.presentation.myList.adapter.MyListAdapter
+import com.movieland.presentation.common.adapter.MyListAdapter
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MyListFragment : Fragment() {
     private lateinit var binding: FragmentMyListBinding
     private val mylistViewModel: MyListViewModel by viewModel()
-    private lateinit var mylistAdapter : MyListAdapter
+    private val mylistAdapter : MyListAdapter by lazy {
+        MyListAdapter()
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding = FragmentMyListBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -35,9 +32,13 @@ class MyListFragment : Fragment() {
         savedInstanceState: Bundle?,
     ) {
         super.onViewCreated(view, savedInstanceState)
+        setupList()
         observeData()
     }
 
+    private fun setupList() {
+        binding.rvMyList.adapter = this@MyListFragment.mylistAdapter
+    }
 
     private fun observeData() {
         mylistViewModel.getAllFavorites().observe(viewLifecycleOwner) {
@@ -46,8 +47,8 @@ class MyListFragment : Fragment() {
                 binding.layoutState.pbLoading.isVisible = false
                 binding.layoutState.tvError.isVisible = false
                 binding.rvMyList.isVisible = true
-                result.payload?.let { (cart, totalPrice) ->
-                    mylistAdapter.submitData(cart)
+                result.payload?.let { (myList) ->
+                    mylistAdapter.submitData(myList)
                 }
             }, doOnLoading = {
                 binding.layoutState.root.isVisible = true
